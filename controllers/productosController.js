@@ -88,7 +88,7 @@ module.exports = {
         db.Producto.create({
             nombre: req.body.nombre,
             marca: req.body.marca,
-            precio: req.body.marca,
+            precio: req.body.precio,
             img_url: req.body.imagen,
             categoria_id: req.body.categoria,
             usuario_id:req.session.usuarioLogueado.id

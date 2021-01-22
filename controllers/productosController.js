@@ -32,28 +32,28 @@ module.exports = {
     buscar: function (req,res) {
         let busqueda = req.query.busqueda;
         db.Producto.findAll({
-            where:
-                {
-                    [op.or]: [
-                            {
-                                nombre: {
-                                    [op.like]: `%${busqueda}%`
-                                }
-                            },
-                            {
-                                marca: {
-                                [op.like]: `%${busqueda}%`
-
-                                }
-                            }
-                   ]
-
-                }
+            where : {
+                [op.or] : [
+                    {
+                        nombre : {
+                            [op.substring] : busqueda
+                        }
+                    },
+                    {
+                        marca : {
+                            [op.substring] : busqueda
+                        }
+                    }
+                ]
+            }
+ 
             
+            })
+            .then (function(resultados){
+                res.render ('resultadoBusqueda', {resultados:resultados}); 
         })
-        .then(function (resultados) {
-            res.render('resultadoBusqueda', { title: busqueda , resultados: resultados});
-        })
+
+      
     },
 
     agregarComentario: function (req,res) {
@@ -88,13 +88,15 @@ module.exports = {
         db.Producto.create({
             nombre: req.body.nombre,
             marca: req.body.marca,
-            precio: req.body.precio,
+            precio: req.body.marca,
+            img_url: req.body.imagen,
             categoria_id: req.body.categoria,
-            img_url: req.body.imagen
+            usuario_id:req.session.usuarioLogueado.id
         })
-        .then(function (resultado) {
-            res.redirect('/productos/detalle/'+ resultado.id)
+        .then(function(){
+            res.redirect('/productos/misProductos')
         })
+       
 
     },
 

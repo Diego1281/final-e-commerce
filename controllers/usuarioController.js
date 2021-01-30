@@ -92,14 +92,16 @@ module.exports = {
         })
     },
 
-    logout: function (req,res) {
-        if (req.session.usuarioLogueado != undefined) {
-            res.redirect("/");
+   
+    logout:function(req,res){
+        req.session.destroy();
+        if(req.cookies.idUsuario){
+            res.cookie('idUsuario','',{maxAge:-1})
         }
-        req.session.usuarioLogueado = undefined;
-        res.clearCookie('idUsuario');
-        return res.redirect('/');
+        return res.redirect('/')
+
     },
+
 
     comentarios: function (req, res) {
         if (req.session.usuarioLogueado == undefined) {
